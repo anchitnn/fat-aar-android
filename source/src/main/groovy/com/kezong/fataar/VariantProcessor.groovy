@@ -361,8 +361,6 @@ class VariantProcessor {
     private TaskProvider handleClassesMergeTask(final boolean isMinifyEnabled) {
         final TaskProvider task = mProject.tasks.register("mergeClasses" + mVariant.name.capitalize()) {
 
-            outputs.upToDateWhen { false }
-
             dependsOn(mExplodeTasks)
             dependsOn(mVersionAdapter.getJavaCompileTask())
             try {
@@ -455,9 +453,6 @@ class VariantProcessor {
             inputs.files(mAndroidArchiveLibraries.stream().map { it.libsFolder }.collect())
                     .withPathSensitivity(PathSensitivity.RELATIVE)
             inputs.files(mJarFiles).withPathSensitivity(PathSensitivity.RELATIVE)
-        }
-        mProject.tasks.named("transform${mVariant.name.capitalize()}ClassesWithAsm").configure {
-            dependsOn(mMergeClassTask)
         }
         extractAnnotationsTask.configure {
             mustRunAfter(mMergeClassTask)
